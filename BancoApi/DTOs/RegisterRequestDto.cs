@@ -8,5 +8,5 @@ public class RegisterRequestDto
     public DateTime? FechaNacimiento { get; set; }
     public string UserName { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
-    public int IdRol { get; set; } // Rol asignado al registrar
+    public int IdRol { get; set; }
 }
