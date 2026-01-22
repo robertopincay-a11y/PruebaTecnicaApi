@@ -19,10 +19,7 @@ GO
 USE BancoDb;
 GO
 
--- ==================================================
 -- 1. CREACIÓN DE TABLAS
--- ==================================================
-
 -- Tabla Persona
 CREATE TABLE Persona (
     IdPersona INT IDENTITY(1,1) PRIMARY KEY,
@@ -210,6 +207,7 @@ DECLARE @IdUsuario INT = SCOPE_IDENTITY();
 INSERT INTO UsuarioRol (IdUsuario, IdRol)
 VALUES (@IdUsuario, 1);
 GO
+
 
 
 
