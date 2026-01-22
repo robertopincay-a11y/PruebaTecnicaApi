@@ -5,15 +5,14 @@
 USE master;
 GO
 
--- Eliminar base de datos si existe
+
 IF DB_ID('BancoDb') IS NOT NULL
 BEGIN
     ALTER DATABASE BancoDb SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
     DROP DATABASE BancoDb;
 END
-GO
 
--- Crear base de datos
+    
 CREATE DATABASE BancoDb;
 GO
 
@@ -33,7 +32,7 @@ CREATE TABLE Persona (
     FechaNacimiento DATE,
     Eliminado BIT NOT NULL DEFAULT 0,
 
-    -- Validaciones básicas
+    
     CONSTRAINT CK_Persona_Identificacion_Length CHECK (LEN(Identificacion) = 10),
     CONSTRAINT CK_Persona_Identificacion_Numeric CHECK (Identificacion NOT LIKE '%[^0-9]%')
 );
@@ -55,7 +54,7 @@ CREATE TABLE Usuario (
     PasswordHash NVARCHAR(255) NOT NULL,
     Mail NVARCHAR(120) NOT NULL UNIQUE,
     SessionActive BIT NOT NULL DEFAULT 0,
-    Status NVARCHAR(20) NOT NULL DEFAULT 'Activo', -- 'Activo', 'Bloqueado'
+    Status NVARCHAR(20) NOT NULL DEFAULT 'Activo', 
     IntentosFallidos INT NOT NULL DEFAULT 0,
     CreadoEn DATETIME2 DEFAULT GETDATE(),
     Eliminado BIT NOT NULL DEFAULT 0,
@@ -65,7 +64,7 @@ CREATE TABLE Usuario (
 );
 GO
 
--- Tabla UsuarioRol (relación muchos a muchos)
+-- Tabla UsuarioRol 
 CREATE TABLE UsuarioRol (
     IdUsuario INT NOT NULL,
     IdRol INT NOT NULL,
@@ -87,9 +86,9 @@ CREATE TABLE [Session] (
 );
 GO
 
--- ==================================================
+
 -- 2. FUNCIÓN PARA VALIDAR IDENTIFICACIÓN
--- ==================================================
+
 
 CREATE FUNCTION dbo.ValidarIdentificacion(@identificacion CHAR(10))
 RETURNS BIT
@@ -121,9 +120,8 @@ BEGIN
 END;
 GO
 
--- ==================================================
+
 -- 3. STORED PROCEDURE PARA REGISTRAR USUARIO
--- ==================================================
 
 CREATE PROCEDURE sp_RegistrarUsuario
     @Nombres NVARCHAR(60),
@@ -131,26 +129,26 @@ CREATE PROCEDURE sp_RegistrarUsuario
     @Identificacion CHAR(10),
     @FechaNacimiento DATE,
     @UserName NVARCHAR(50),
-    @Password NVARCHAR(255), -- Ya hasheada desde la app
+    @Password NVARCHAR(255),
     @IdRol INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Validar identificación
+    
     IF dbo.ValidarIdentificacion(@Identificacion) = 0
     BEGIN
         RAISERROR('Identificación inválida: debe tener 10 dígitos y no contener 4 números repetidos consecutivos.', 16, 1);
         RETURN;
     END
 
-    -- Insertar en Persona
+    
     INSERT INTO Persona (Nombres, Apellidos, Identificacion, FechaNacimiento)
     VALUES (@Nombres, @Apellidos, @Identificacion, @FechaNacimiento);
 
     DECLARE @IdPersona INT = SCOPE_IDENTITY();
 
-    -- Generar correo
+    
     DECLARE @PrimeraLetraNombre CHAR(1) = LOWER(LEFT(@Nombres, 1));
     DECLARE @ApellidoSinEspacios NVARCHAR(60) = REPLACE(LOWER(@Apellidos), ' ', '');
     DECLARE @ApellidoLimpio NVARCHAR(60) = '';
@@ -172,26 +170,23 @@ BEGIN
         SET @Contador = @Contador + 1;
     END
 
-    -- Insertar en Usuario
+    
     INSERT INTO Usuario (IdPersona, UserName, PasswordHash, Mail, Status)
     VALUES (@IdPersona, @UserName, @Password, @MailFinal, 'Activo');
 
     DECLARE @IdUsuario INT = SCOPE_IDENTITY();
 
-    -- Asignar rol
+    
     INSERT INTO UsuarioRol (IdUsuario, IdRol)
     VALUES (@IdUsuario, @IdRol);
 
-    -- Retornar éxito
+    
     SELECT @IdUsuario AS IdUsuario, @MailFinal AS CorreoGenerado;
 END;
 GO
 
--- ==================================================
 -- 4. DATOS DE PRUEBA
--- ==================================================
 
--- Insertar roles
 INSERT INTO Rol (NombreRol) VALUES ('Administrador'), ('Usuario');
 GO
 
@@ -213,7 +208,8 @@ VALUES (
 );
 DECLARE @IdUsuario INT = SCOPE_IDENTITY();
 INSERT INTO UsuarioRol (IdUsuario, IdRol)
-VALUES (@IdUsuario, 1); -- Rol Administrador
+VALUES (@IdUsuario, 1);
 GO
+
 
 
