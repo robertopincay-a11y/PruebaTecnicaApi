@@ -18,18 +18,18 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Mapeo explícito de nombres de tablas
+        
         modelBuilder.Entity<Persona>().ToTable("Persona");
         modelBuilder.Entity<Usuario>().ToTable("Usuario");
         modelBuilder.Entity<Rol>().ToTable("Rol");
         modelBuilder.Entity<UsuarioRol>().ToTable("UsuarioRol");
         modelBuilder.Entity<Session>().ToTable("Session");
 
-        // Claves compuestas
+        
         modelBuilder.Entity<UsuarioRol>()
             .HasKey(ur => new { ur.IdUsuario, ur.IdRol });
 
-        // Relaciones
+        
         modelBuilder.Entity<Usuario>()
             .HasOne(u => u.Persona)
             .WithMany()
