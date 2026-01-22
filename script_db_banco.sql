@@ -1,5 +1,5 @@
 
--- Script de Base de Datos - Prueba Técnica 
+-- Script de Base de Datos - Prueba TÃ©cnica 
 
 
 USE master;
@@ -21,7 +21,7 @@ USE BancoDb;
 GO
 
 -- ==================================================
--- 1. CREACIÓN DE TABLAS
+-- 1. CREACIÃ“N DE TABLAS
 -- ==================================================
 
 -- Tabla Persona
@@ -33,7 +33,7 @@ CREATE TABLE Persona (
     FechaNacimiento DATE,
     Eliminado BIT NOT NULL DEFAULT 0,
 
-    -- Validaciones básicas
+    -- Validaciones bÃ¡sicas
     CONSTRAINT CK_Persona_Identificacion_Length CHECK (LEN(Identificacion) = 10),
     CONSTRAINT CK_Persona_Identificacion_Numeric CHECK (Identificacion NOT LIKE '%[^0-9]%')
 );
@@ -65,7 +65,7 @@ CREATE TABLE Usuario (
 );
 GO
 
--- Tabla UsuarioRol (relación muchos a muchos)
+-- Tabla UsuarioRol (relaciÃ³n muchos a muchos)
 CREATE TABLE UsuarioRol (
     IdUsuario INT NOT NULL,
     IdRol INT NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE [Session] (
 GO
 
 -- ==================================================
--- 2. FUNCIÓN PARA VALIDAR IDENTIFICACIÓN
+-- 2. FUNCIÃ“N PARA VALIDAR IDENTIFICACIÃ“N
 -- ==================================================
 
 CREATE FUNCTION dbo.ValidarIdentificacion(@identificacion CHAR(10))
@@ -137,10 +137,10 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Validar identificación
+    -- Validar identificaciÃ³n
     IF dbo.ValidarIdentificacion(@Identificacion) = 0
     BEGIN
-        RAISERROR('Identificación inválida: debe tener 10 dígitos y no contener 4 números repetidos consecutivos.', 16, 1);
+        RAISERROR('IdentificaciÃ³n invÃ¡lida: debe tener 10 dÃ­gitos y no contener 4 nÃºmeros repetidos consecutivos.', 16, 1);
         RETURN;
     END
 
@@ -182,7 +182,7 @@ BEGIN
     INSERT INTO UsuarioRol (IdUsuario, IdRol)
     VALUES (@IdUsuario, @IdRol);
 
-    -- Retornar éxito
+    -- Retornar Ã©xito
     SELECT @IdUsuario AS IdUsuario, @MailFinal AS CorreoGenerado;
 END;
 GO
@@ -196,16 +196,13 @@ INSERT INTO Rol (NombreRol) VALUES ('Administrador'), ('Usuario');
 GO
 
 -- Usuario "root" (administrador)
--- Contraseña: Passw0rd!
+-- ContraseÃ±a: Passw0rd!
 -- Hash generado con BCrypt: $2a$11$DxL5GqkXKZyMvJzQWfRtOeF1mYpN3sL8uV7rT9oPqR4sU6vW8xYz.
 
-
+DECLARE @IdPersona INT;
 INSERT INTO Persona (Nombres, Apellidos, Identificacion, FechaNacimiento)
 VALUES ('Admin', 'Root', '1206505023', '1985-01-01');
-
-DECLARE @IdPersona INT;
 SET @IdPersona = SCOPE_IDENTITY();
-
 INSERT INTO Usuario (IdPersona, UserName, PasswordHash, Mail, Status)
 VALUES (
     @IdPersona,
@@ -214,10 +211,9 @@ VALUES (
     'adminroot@mail.com',
     'Activo'
 );
-
 DECLARE @IdUsuario INT = SCOPE_IDENTITY();
-
 INSERT INTO UsuarioRol (IdUsuario, IdRol)
 VALUES (@IdUsuario, 1); -- Rol Administrador
 GO
+
 
