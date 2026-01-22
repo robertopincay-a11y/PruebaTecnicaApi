@@ -1,0 +1,188 @@
+{
+  "info": {
+    "_postman_id": "c5fa1f2a-7ace-405e-8dab-a31756c93817",
+    "name": "My Collection",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51742312",
+    "_collection_link": "https://go.postman.co/collection/51742312-c5fa1f2a-7ace-405e-8dab-a31756c93817?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nombres\": \"Carlos\",\r\n  \"apellidos\": \"Mendoza Ruiz\",\r\n  \"identificacion\": \"1206505026\",\r\n  \"fechaNacimiento\": \"1995-03-10T00:00:00\",\r\n  \"userName\": \"CarlosM123\",\r\n  \"password\": \"Passw0rd!\",\r\n  \"idRol\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:44327/api/auth/register",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44327",
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Successful POST request\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"credential\": \"CarlosM123\",\r\n  \"password\": \"Passw0rd!\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:44327/api/Auth/login",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44327",
+          "path": [
+            "api",
+            "Auth",
+            "login"
+          ]
+        },
+        "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+      },
+      "response": []
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:44327/api/auth/logout/2",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44327",
+          "path": [
+            "api",
+            "auth",
+            "logout",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar roles",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:44327/api/roles",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44327",
+          "path": [
+            "api",
+            "roles"
+          ]
+        },
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Usuarios",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:44327/api/auth",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44327",
+          "path": [
+            "api",
+            "auth"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Usuario (Logicamente)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:44327/api/auth/2",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44327",
+          "path": [
+            "api",
+            "auth",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
