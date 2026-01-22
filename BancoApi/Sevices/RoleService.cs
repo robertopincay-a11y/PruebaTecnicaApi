@@ -17,7 +17,7 @@ public class RoleService
     public async Task<List<RoleDto>> GetAllRolesAsync()
     {
         return await _context.Roles
-            .Where(r => !r.Eliminado) // si decides agregar "Eliminado" a Rol
+            .Where(r => !r.Eliminado)
             .Select(r => new RoleDto
             {
                 IdRol = r.IdRol,
