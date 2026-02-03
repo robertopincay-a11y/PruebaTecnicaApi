@@ -1,4 +1,4 @@
-# Prueba Técnica - API REST para Banco
+# Prueba Técnica
 
 API REST desarrollada en **.NET 6** con **Entity Framework Core** y **SQL Server**, cumpliendo todos los requisitos del documento de prueba técnica.
 
